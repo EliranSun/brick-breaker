@@ -6,13 +6,9 @@ public class GameManager : ObserverSubject
     public int score; //The player's current score
     public int lives; //The amount of lives the player has remaining
     public int ballSpeedIncrement; //The amount of speed the ball will increase by everytime it hits a brick
-    public bool gameOver; //Set true when the game is over
-    public bool wonGame; //Set true when the game has been won
 
     public GameObject paddle; //The paddle game object
     public GameObject ball; //The ball game object
-
-    public GameUI gameUI; //The GameUI class
 
     //Prefabs
     public GameObject brickPrefab; //The prefab of the Brick game object which will be spawned
@@ -34,8 +30,6 @@ public class GameManager : ObserverSubject
     {
         score = 0;
         lives = 3;
-        gameOver = false;
-        wonGame = false;
         paddle.SetActive(true);
         ball.SetActive(true);
         paddle.GetComponent<Paddle>().ResetPaddle();
@@ -77,7 +71,6 @@ public class GameManager : ObserverSubject
     //Called when there is no bricks left and the player has won
     public void WinGame()
     {
-        wonGame = true;
         paddle.SetActive(false);
         ball.SetActive(false);
         // gameUI.SetWin(); //Set the game over UI screen
@@ -92,7 +85,6 @@ public class GameManager : ObserverSubject
         if (lives < 0)
         {
             //Are the lives less than 0? Are there no lives left?
-            gameOver = true;
             paddle.SetActive(false);
             ball.SetActive(false);
             // gameUI.SetGameOver(); //Set the game over UI screen
@@ -103,5 +95,11 @@ public class GameManager : ObserverSubject
 
             bricks = new List<GameObject>(); //Resets the 'bricks' list variable
         }
+    }
+
+    public void TryAgain()
+    {
+        StartGame();
+        NotifyObservers(GameUpdates.GameStart);
     }
 }
