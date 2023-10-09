@@ -1,0 +1,16 @@
+{
+    "name": "BallAssembly",
+    "rootNamespace": "",
+    "references": [
+        "GUID:017d9e57da8b44907a1094339661beb9"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

@@ -1,15 +1,16 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using UnityEngine;
 
-public class Ball : MonoBehaviour
+public class Ball : ObserverSubject
 {
     public float speed; //The amount of units that the ball will move each second
     public float maxSpeed; //The maximum speed that the ball can travel at
     public Vector2 direction; //The Vector2 direction that the ball will move in (eg: diagonal = Vector2(1, 1))
     public Rigidbody2D rig; //The ball's Rigidbody 2D component
-    public GameManager manager; //The GameManager
     public bool goingLeft; //Set to true when the ball is going left
     public bool goingDown; //Set to true xwhen the ball is going down
+    public int ballSpeedIncrement; //The amount of speed the ball will increase by everytime it hits a brick
 
     private void Start()
     {
@@ -22,8 +23,8 @@ public class Ball : MonoBehaviour
     private void Update()
     {
         rig.velocity =
-            direction * speed *
-            Time.deltaTime; //Sets the object's rigidbody velocity to the direction multiplied by the speed
+            direction * (speed *
+                         Time.deltaTime); //Sets the object's rigidbody velocity to the direction multiplied by the speed
 
         if (transform.position.x > 5 && !goingLeft)
         {
@@ -50,7 +51,7 @@ public class Ball : MonoBehaviour
         }
 
         if (transform.position.y < -5) //Has the ball gone down past the paddle
-            ResetBall(); //Call the 'ResetBall()' function to reset the ball in the middle of the screen
+            ResetBall(); // Call the 'ResetBall()' function to reset the ball in the middle of the screen
     }
 
     //Called when the ball needs to change direction (hit paddle, hit brick). The target parameter is the position of the object that the ball has hit
@@ -65,8 +66,7 @@ public class Ball : MonoBehaviour
 
         direction = dir; //Sets the ball's direction to the 'dir' variable
 
-        speed += manager
-            .ballSpeedIncrement; //Increases the speed of the ball by the GameManager's 'ballSpeedIncrement' value
+        speed += ballSpeedIncrement;
 
         if (speed > maxSpeed) //Is the speed of the ball more than the 'maxSpeed' value
             speed = maxSpeed;
@@ -81,6 +81,12 @@ public class Ball : MonoBehaviour
             goingDown = true;
     }
 
+    private void OnTriggerEnter2D(Collider2D col)
+    {
+        if (col.gameObject.tag == "Brick")
+            SetDirection(col.gameObject.transform.position);
+    }
+
     //Called when the ball goes underneath the paddle and "dies"
     public void ResetBall()
     {
@@ -88,7 +94,8 @@ public class Ball : MonoBehaviour
         direction = Vector2.down; //Sets the ball's direction to go down
         StartCoroutine(
             "ResetBallWaiter"); //Starts the 'ResetBallWaiter' coroutine to have the ball wait 1 second before moving
-        manager.LiveLost(); //Calls the 'LiveLost()' function in the GameManager function
+
+        NotifyObservers(GameUpdates.BallLost);
     }
 
     // Called to make the ball wait a second before moving.
@@ -97,6 +104,6 @@ public class Ball : MonoBehaviour
     {
         speed = 0;
         yield return new WaitForSeconds(1.0f); //Wait 1 second
-        speed = 200;
+        speed = 1000;
     }
 }

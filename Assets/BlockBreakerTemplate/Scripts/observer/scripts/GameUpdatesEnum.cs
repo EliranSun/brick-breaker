@@ -4,5 +4,7 @@ public enum GameUpdates
     GameWon,
     GameStart,
     BrickDestroyed,
+    ScoreChanged,
+    LivesChanged,
     BallLost
 }

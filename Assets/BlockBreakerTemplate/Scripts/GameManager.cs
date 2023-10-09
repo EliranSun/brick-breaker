@@ -6,7 +6,6 @@ public class GameManager : ObserverSubject
 {
     public int score; //The player's current score
     public int lives; //The amount of lives the player has remaining
-    public int ballSpeedIncrement; //The amount of speed the ball will increase by everytime it hits a brick
 
     public GameObject paddle; //The paddle game object
     public GameObject ball; //The ball game object
@@ -18,8 +17,8 @@ public class GameManager : ObserverSubject
     public int brickCountX; //The amount of bricks that will be spawned horizontally (Odd numbers are recommended)
     public int brickCountY; //The amount of bricks that will be spawned vertically
 
-    public Color[]
-        colors; //The color array of the bricks. This can be modified to create different brick color patterns
+    // The color array of the bricks. This can be modified to create different brick color patterns
+    public Color[] colors;
 
     private void Start()
     {
@@ -68,8 +67,8 @@ public class GameManager : ObserverSubject
                 colorId = 0;
         }
 
-        ball.GetComponent<Ball>()
-            .ResetBall(); //Gets the 'Ball' component of the ball game object and calls the 'ResetBall()' function to set the ball in the middle of the screen
+        // ball.GetComponent<Ball>()
+        //     .ResetBall(); //Gets the 'Ball' component of the ball game object and calls the 'ResetBall()' function to set the ball in the middle of the screen
     }
 
     //Called when there is no bricks left and the player has won
@@ -77,21 +76,19 @@ public class GameManager : ObserverSubject
     {
         paddle.SetActive(false);
         ball.SetActive(false);
-        // gameUI.SetWin(); //Set the game over UI screen
         NotifyObservers(GameUpdates.GameWon);
     }
 
     //Called when the ball goes under the paddle and "dies"
     public void LiveLost()
     {
-        lives--; //Removes a life
+        lives--;
 
-        if (lives < 0)
+        if (lives <= 0)
         {
             //Are the lives less than 0? Are there no lives left?
             paddle.SetActive(false);
             ball.SetActive(false);
-            // gameUI.SetGameOver(); //Set the game over UI screen
             NotifyObservers(GameUpdates.GameOver, score);
 
             foreach (var brick in bricks)
@@ -115,9 +112,16 @@ public class GameManager : ObserverSubject
         if (message == GameUpdates.BrickDestroyed.ToString())
         {
             score++;
+            NotifyObservers(GameUpdates.ScoreChanged, score);
             var obj = EditorUtility.InstanceIDToObject(value) as GameObject;
             bricks.Remove(obj);
             if (bricks.Count == 0) WinGame();
+        }
+
+        if (message == GameUpdates.BallLost.ToString())
+        {
+            LiveLost();
+            NotifyObservers(GameUpdates.LivesChanged, lives);
         }
     }
 }

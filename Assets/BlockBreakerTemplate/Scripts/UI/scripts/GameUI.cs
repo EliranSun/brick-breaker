@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class GameUI : MonoBehaviour
@@ -16,13 +17,13 @@ public class GameUI : MonoBehaviour
         var message = payload.Split(":")[0];
         var value = payload.Split(":")[1];
 
-        if (message == GameUpdates.BrickDestroyed.ToString())
+        if (message == GameUpdates.ScoreChanged.ToString())
             //Sets the scoreText to display the words 'SCORE' in bold and then the score value on a new line which is located in the GameManager class
-            scoreText.text = "<b>SCORE</b>\n" + value;
+            scoreText.text = $"<b>SCORE</b>\n {value}";
 
-        if (message == GameUpdates.BallLost.ToString())
+        if (message == GameUpdates.LivesChanged.ToString())
             //Sets the scoreText to display the words 'SCORE' in bold and then the score value on a new line which is located in the GameManager class
-            scoreText.text = "<b>LIVES</b>\n" + value;
+            livesText.text = $"<b>LIVES</b>\n {value}";
 
         if (message == GameUpdates.GameOver.ToString() || message == GameUpdates.GameWon.ToString())
         {
@@ -42,7 +43,7 @@ public class GameUI : MonoBehaviour
 
         if (message == GameUpdates.GameStart.ToString())
         {
-            scoreText.text = "<b>SCORE</b> \n 45";
+            scoreText.text = "<b>SCORE</b> \n 0";
             livesText.text = "<b>LIVES</b> \n 3";
             gameOverScreen.SetActive(false);
             winScreen.SetActive(false);
@@ -52,6 +53,6 @@ public class GameUI : MonoBehaviour
     //Called when the 'MENU' button is pressed
     public void MenuButton()
     {
-        Application.LoadLevel(0); //Loads the 'Menu' scene
+        SceneManager.LoadScene("Menu");
     }
 }
