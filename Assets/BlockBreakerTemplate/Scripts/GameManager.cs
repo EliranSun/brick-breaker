@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEditor;
 
 public class GameManager : ObserverSubject
 {
@@ -50,8 +51,11 @@ public class GameManager : ObserverSubject
                     0); //The 'pos' variable is where the brick will spawn at
                 var brick = Instantiate(brickPrefab, pos,
                     Quaternion.identity); //Creates a new brick game object at the 'pos' value
-                brick.GetComponent<Brick>().manager =
-                    this; //Gets the 'Brick' component of the game object and sets its 'manager' variable to this the GameManager
+
+                brick.GetComponent<Brick>().observers.AddListener(OnNotify);
+
+                // Gets the 'Brick' component of the game object and sets its 'manager' variable to this the GameManager
+                // brick.GetComponent<Brick>().manager = this; 
                 brick.GetComponent<SpriteRenderer>().color =
                     colors[colorId]; //Gets the 'SpriteRenderer' component of the brick object and sets the color
                 bricks.Add(brick); //Adds the new brick object to the 'bricks' list
@@ -101,5 +105,19 @@ public class GameManager : ObserverSubject
     {
         StartGame();
         NotifyObservers(GameUpdates.GameStart);
+    }
+
+    public void OnNotify(string payload)
+    {
+        var message = payload.Split(":")[0];
+        var value = int.Parse(payload.Split(":")[1]);
+
+        if (message == GameUpdates.BrickDestroyed.ToString())
+        {
+            score++;
+            var obj = EditorUtility.InstanceIDToObject(value) as GameObject;
+            bricks.Remove(obj);
+            if (bricks.Count == 0) WinGame();
+        }
     }
 }
