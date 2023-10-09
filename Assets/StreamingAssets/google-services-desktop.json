@@ -1,0 +1,31 @@
+{
+  "project_info": {
+    "project_number": "581922488754",
+    "project_id": "brick-breaker-88789",
+    "storage_bucket": "brick-breaker-88789.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:581922488754:ios:6fc2ffc84aeb2146dc24ab",
+        "android_client_info": {
+          "package_name": "a"
+        }
+      },
+      "api_key": [
+        {
+          "current_key": "AIzaSyCPhSpGLs4FmkN3ZBQ9PrEMg2kDKFCMFG4"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 0
+        },
+        "appinvite_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
