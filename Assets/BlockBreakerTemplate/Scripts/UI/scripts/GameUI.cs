@@ -1,10 +1,9 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class GameUI : MonoBehaviour
 {
-    // public GameManager manager;		//The GameManager
-
     public Text scoreText; //The Text component that will display the score
     public Text livesText; //The Text component that will display the lives
 
@@ -13,18 +12,18 @@ public class GameUI : MonoBehaviour
 
     public GameObject winScreen; //The win screen game object
 
-    private void OnNotify(string payload)
+    public void OnNotify(string payload)
     {
-        var message = payload.Split(":")[0];
-        var value = payload.Split(":")[1];
+        var message = payload.Split("::")[0];
+        var value = payload.Split("::")[1];
 
-        if (message == GameUpdates.ScoreUpdated.ToString())
+        if (message == GameUpdates.ScoreChanged.ToString())
             //Sets the scoreText to display the words 'SCORE' in bold and then the score value on a new line which is located in the GameManager class
-            scoreText.text = "<b>SCORE</b>\n" + value;
+            scoreText.text = $"<b>SCORE</b>\n {value}";
 
-        if (message == GameUpdates.LivesUpdated.ToString())
+        if (message == GameUpdates.LivesChanged.ToString())
             //Sets the scoreText to display the words 'SCORE' in bold and then the score value on a new line which is located in the GameManager class
-            scoreText.text = "<b>LIVES</b>\n" + value;
+            livesText.text = $"<b>LIVES</b>\n {value}";
 
         if (message == GameUpdates.GameOver.ToString() || message == GameUpdates.GameWon.ToString())
         {
@@ -44,23 +43,16 @@ public class GameUI : MonoBehaviour
 
         if (message == GameUpdates.GameStart.ToString())
         {
+            scoreText.text = "<b>SCORE</b> \n 0";
+            livesText.text = "<b>LIVES</b> \n 3";
             gameOverScreen.SetActive(false);
             winScreen.SetActive(false);
-            // StartGame()?
         }
     }
-
-    // //Called when the 'TRY AGAIN' button is pressed
-    // public void TryAgainButton()
-    // {
-    //     gameOverScreen.active = false;
-    //     winScreen.active = false;
-    //     manager.StartGame();
-    // }
 
     //Called when the 'MENU' button is pressed
     public void MenuButton()
     {
-        Application.LoadLevel(0); //Loads the 'Menu' scene
+        SceneManager.LoadScene("Menu");
     }
 }

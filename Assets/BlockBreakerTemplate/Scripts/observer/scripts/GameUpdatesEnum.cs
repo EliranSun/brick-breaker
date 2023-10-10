@@ -3,6 +3,8 @@ public enum GameUpdates
     GameOver,
     GameWon,
     GameStart,
-    ScoreUpdated,
-    LivesUpdated
+    BrickDestroyed,
+    ScoreChanged,
+    LivesChanged,
+    BallLost
 }
