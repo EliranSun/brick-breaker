@@ -14,8 +14,10 @@ public class GameUI : MonoBehaviour
 
     public void OnNotify(string payload)
     {
-        var message = payload.Split(":")[0];
-        var value = payload.Split(":")[1];
+        var message = payload.Split("::")[0];
+        var value = payload.Split("::")[1];
+
+        print($"MESSAGE {message} VALUE {value}");
 
         if (message == GameUpdates.ScoreChanged.ToString())
             //Sets the scoreText to display the words 'SCORE' in bold and then the score value on a new line which is located in the GameManager class

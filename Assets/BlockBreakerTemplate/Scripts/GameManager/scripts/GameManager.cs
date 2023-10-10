@@ -100,8 +100,8 @@ public class GameManager : ObserverSubject
 
     public void OnNotify(string payload)
     {
-        var message = payload.Split(":")[0];
-        var value = int.Parse(payload.Split(":")[1]);
+        var message = payload.Split("::")[0];
+        var value = int.Parse(payload.Split("::")[1]);
 
         if (message == GameUpdates.BrickDestroyed.ToString())
         {

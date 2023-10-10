@@ -1,21 +1,19 @@
 using System;
 using System.Threading.Tasks;
+using BlockBreakerTemplate.Scripts.observer.scripts;
 using Firebase.Extensions;
 using Firebase.RemoteConfig;
 using UnityEngine;
 using Cysharp.Threading.Tasks;
 
-public class FirebaseManager : MonoBehaviour
+public class FirebaseManager : ObserverSubject
 {
     private async UniTaskVoid Start()
     {
-        Debug.Log("Fetching data...");
-        var fetchTask =
-            FirebaseRemoteConfig.DefaultInstance.FetchAsync(
-                TimeSpan.Zero);
+        Debug.Log("Fetching & Listening to data...");
 
-        FirebaseRemoteConfig.DefaultInstance.OnConfigUpdateListener
-            += ConfigUpdateListenerEventHandler;
+        var fetchTask = FirebaseRemoteConfig.DefaultInstance.FetchAsync(TimeSpan.Zero);
+        FirebaseRemoteConfig.DefaultInstance.OnConfigUpdateListener += ConfigUpdateListenerEventHandler;
 
         await fetchTask.ContinueWithOnMainThread(FetchComplete);
         await UniTask.SwitchToMainThread();
@@ -43,8 +41,9 @@ public class FirebaseManager : MonoBehaviour
             .ContinueWithOnMainThread(
                 task =>
                 {
-                    Debug.Log($"Remote data loaded and ready for use. Last fetch time {info.FetchTime}.");
-                    Debug.Log(FirebaseRemoteConfig.DefaultInstance.GetValue("GameOverScreen").StringValue);
+                    print($"Remote data loaded and ready for use. Last fetch time {info.FetchTime}.");
+                    var configValue = FirebaseRemoteConfig.DefaultInstance.GetValue("GameOverScreen");
+                    NotifyObservers(ConfigUpdatesEnum.GameOverScreen, configValue);
                 });
     }
 
