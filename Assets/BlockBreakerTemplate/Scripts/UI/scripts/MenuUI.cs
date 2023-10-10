@@ -18,6 +18,10 @@ public class MenuUI : MonoBehaviour
     [SerializeField] private Text gameOverScreenPlayButton;
     [SerializeField] private Text gameOverScreenMenuButton;
 
+    [SerializeField] private Text winScreenTitle;
+    [SerializeField] private Text winScreenPlayButton;
+    [SerializeField] private Text winScreenMenuButton;
+
     public void PlayButton()
     {
         SceneManager.LoadScene(1);
@@ -34,24 +38,29 @@ public class MenuUI : MonoBehaviour
         var message = payload.Split("::")[0];
         var value = payload.Split("::")[1];
 
-        print($"MESSAGE {message} VALUE {value}");
-
         if (message == ConfigUpdatesEnum.GameOverScreen.ToString())
             try
             {
                 var gameOverScreenConfig = JsonUtility.FromJson<GameOverScreenConfig>(value);
 
-                // gameOverScreenTitle = GameObject.Find("GameOverText").GetComponent<Text>();
-                // gameOverScreenScore = GameObject.Find("GameOverScoreText").GetComponent<TextMeshProUGUI>();
-                // gameOverScreenPlayButton = GameObject.Find("TryAgainButton").GetComponentInChildren<TextMeshProUGUI>();
-                // gameOverScreenMenuButton = GameObject.Find("MenuButton").GetComponentInChildren<TextMeshProUGUI>();
-
-                print($"gameOverScreenConfig {gameOverScreenConfig.title} textmeshpro {gameOverScreenTitle}");
-
                 gameOverScreenTitle.text = gameOverScreenConfig.title;
                 gameOverScreenScore.text = gameOverScreenConfig.score;
                 gameOverScreenPlayButton.text = gameOverScreenConfig.playButton;
                 gameOverScreenMenuButton.text = gameOverScreenConfig.menuButton;
+            }
+            catch (System.Exception e)
+            {
+                Debug.LogError($"Exception {e}");
+            }
+
+        if (message == ConfigUpdatesEnum.WinScreen.ToString())
+            try
+            {
+                var config = JsonUtility.FromJson<GameOverScreenConfig>(value);
+
+                winScreenTitle.text = config.title;
+                winScreenPlayButton.text = config.playButton;
+                winScreenMenuButton.text = config.menuButton;
             }
             catch (System.Exception e)
             {

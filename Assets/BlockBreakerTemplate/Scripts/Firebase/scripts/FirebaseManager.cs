@@ -13,7 +13,6 @@ public class FirebaseManager : ObserverSubject
         Debug.Log("Fetching & Listening to data...");
 
         var fetchTask = FirebaseRemoteConfig.DefaultInstance.FetchAsync(TimeSpan.Zero);
-        FirebaseRemoteConfig.DefaultInstance.OnConfigUpdateListener += ConfigUpdateListenerEventHandler;
 
         await fetchTask.ContinueWithOnMainThread(FetchComplete);
         await UniTask.SwitchToMainThread();
@@ -42,8 +41,13 @@ public class FirebaseManager : ObserverSubject
                 task =>
                 {
                     print($"Remote data loaded and ready for use. Last fetch time {info.FetchTime}.");
-                    var configValue = FirebaseRemoteConfig.DefaultInstance.GetValue("GameOverScreen");
-                    NotifyObservers(ConfigUpdatesEnum.GameOverScreen, configValue);
+                    var configGameOverValue = FirebaseRemoteConfig.DefaultInstance.GetValue("GameOverScreen");
+                    var configWinValue = FirebaseRemoteConfig.DefaultInstance.GetValue("WinScreen");
+                    NotifyObservers(ConfigUpdatesEnum.GameOverScreen, configGameOverValue);
+                    NotifyObservers(ConfigUpdatesEnum.WinScreen, configWinValue);
+
+                    // FIXME: Listener does not work
+                    FirebaseRemoteConfig.DefaultInstance.OnConfigUpdateListener += ConfigUpdateListenerEventHandler;
                 });
     }
 
