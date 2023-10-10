@@ -83,7 +83,7 @@ public class Ball : ObserverSubject
 
     private void OnTriggerEnter2D(Collider2D col)
     {
-        if (col.gameObject.tag == "Brick")
+        if (col.gameObject.tag == "Brick" || col.gameObject.tag == "Paddle")
             SetDirection(col.gameObject.transform.position);
     }
 

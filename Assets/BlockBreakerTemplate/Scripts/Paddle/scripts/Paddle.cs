@@ -28,16 +28,7 @@ public class Paddle : MonoBehaviour
         }
     }
 
-//Called whenever a trigger has entered this objects BoxCollider2D. The value 'col' is the Collider2D object that has interacted with this one
-    internal void OnTriggerEnter2D(Collider2D col)
-    {
-        if (col.gameObject.tag == "Ball") //Is the colliding object got the tag "Ball"?
-            col.gameObject.GetComponent<Ball>()
-                .SetDirection(transform
-                    .position); //Get the 'Ball' component of the colliding object and call the 'SetDirection()' function to bounce the ball of the paddle
-    }
-
-//Called when the paddle needs to be reset to the middle of the screen
+    //Called when the paddle needs to be reset to the middle of the screen
     public void ResetPaddle()
     {
         transform.position = new Vector3(0, transform.position.y, 0); //Sets the paddle's x position to 0
