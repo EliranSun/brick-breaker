@@ -8,7 +8,6 @@ public class ObserverSubject : MonoBehaviour
     protected void NotifyObservers(GameUpdates message, int value = 0)
     {
         var payload = $"{message}:{value}";
-        print($"NOTIFY OBSERVERS {payload}; Observers: {observers}");
         observers?.Invoke(payload);
     }
 }
