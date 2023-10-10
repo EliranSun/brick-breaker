@@ -14,10 +14,19 @@ public class Ball : ObserverSubject
 
     private void Start()
     {
-        transform.position = Vector3.zero; //Sets the ball position to the middle of the screen
-        direction = Vector2.down; //Sets the ball's direction to go down
-        StartCoroutine(
-            "ResetBallWaiter"); //Starts the 'ResetBallWaiter' coroutine to have the ball wait 1 second before moving
+        // Sets the ball position to the middle of the screen
+        transform.position = Vector3.zero;
+        // Sets the ball's direction to go down
+        direction = Vector2.down;
+        // Starts the 'ResetBallWaiter' coroutine to have the ball wait 1 second before moving
+        StartCoroutine(nameof(ResetBallWaiter));
+    }
+
+    private void OnEnable()
+    {
+        transform.position = Vector3.zero;
+        direction = Vector2.down;
+        StartCoroutine(nameof(ResetBallWaiter));
     }
 
     private void Update()

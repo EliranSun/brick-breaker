@@ -53,22 +53,16 @@ public class GameManager : ObserverSubject
 
                 brick.GetComponent<Brick>().observers.AddListener(OnNotify);
 
-                // Gets the 'Brick' component of the game object and sets its 'manager' variable to this the GameManager
-                // brick.GetComponent<Brick>().manager = this; 
-                brick.GetComponent<SpriteRenderer>().color =
-                    colors[colorId]; //Gets the 'SpriteRenderer' component of the brick object and sets the color
+                //Gets the 'SpriteRenderer' component of the brick object and sets the color
+                brick.GetComponent<SpriteRenderer>().color = colors[colorId];
                 bricks.Add(brick); //Adds the new brick object to the 'bricks' list
             }
 
             colorId++; //Increases the 'colorId' by 1 as a new row is about to be made
 
-            if (colorId == colors
-                    .Length) //If the 'colorId' is equal to the 'colors' array length. This means there is no more colors left
-                colorId = 0;
+            // If the 'colorId' is equal to the 'colors' array length. This means there is no more colors left
+            if (colorId == colors.Length) colorId = 0;
         }
-
-        // ball.GetComponent<Ball>()
-        //     .ResetBall(); //Gets the 'Ball' component of the ball game object and calls the 'ResetBall()' function to set the ball in the middle of the screen
     }
 
     //Called when there is no bricks left and the player has won
